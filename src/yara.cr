@@ -1,5 +1,7 @@
-# TODO: Write documentation for `Yara.cr`
-module Yara.cr
+require "./lib.cr"
+
+# TODO: Write documentation for `Yara`
+module Yara
   VERSION = "0.1.0"
 
   # TODO: Put your code here

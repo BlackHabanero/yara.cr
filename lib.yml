@@ -1,0 +1,21 @@
+name: LibYara
+ldflags: "-lyara"
+packages: yara
+destdir: src/
+definitions:
+  lib:
+    includes:
+    - yara.h
+    prefixes:
+    - YR
+    - Yr
+    - yr
+rename:
+  rules:
+    "*":
+    - pattern: ^yr_
+      replacement: ""
+    - pattern: ^YR_
+      replacement: ""
+    - pattern: ^Yr_
+      replacement: ""
