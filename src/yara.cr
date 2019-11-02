@@ -17,6 +17,23 @@ module Yara
     end
   end
 
+  class Compiler
+    def initialize
+    end
+    def add_file
+    end
+    def add_file_descriptor
+    end
+    def add_string
+    end
+    def define_var
+    end
+    def compile
+    end
+    def finalize
+    end
+  end
+
   class YaraException < Exception
   end
 end
