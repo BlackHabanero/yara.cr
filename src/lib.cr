@@ -354,7 +354,7 @@ lib LibYara
     prev : X_YrArenaPage*
   end
 
-  struct X_YrCompiler
+  struct YrCompiler
     errors : LibC::Int
     current_line : LibC::Int
     last_error : LibC::Int
@@ -734,7 +734,6 @@ lib LibYara
   type YrAcMatchTableEntry = Void*
   type YrArena = X_YrArena
   type YrArenaPage = X_YrArenaPage
-  type YrCompiler = X_YrCompiler
   type YrConfigName = X_YrConfigName
   type YrFixup = X_YrFixup
   type YrHashTable = X_YrHashTable

@@ -11,26 +11,24 @@ module Yara
       end
     end
     def finalize
-      unless LibYara.finalize == 0
-        raise YaraException.new("Cannot finalize libyara")
-      end
+      LibYara.finalize
     end
   end
 
   class Compiler
     def initialize
+      unless LibYara.compiler_create(out @compiler) == 0
+        raise YaraException.new("Cannot initialize yara compiler")
+      end
     end
-    def add_file
+    def add_input_src(obj : File|FileDescriptor|String)
     end
-    def add_file_descriptor
-    end
-    def add_string
-    end
-    def define_var
+    def def_external_var(identifier : String, var : Boolean|Float64|String|LibC::Long)
     end
     def compile
     end
     def finalize
+      LibYara.compiler_destroy(@compiler)
     end
   end
 
