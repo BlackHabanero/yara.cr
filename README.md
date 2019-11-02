@@ -1,6 +1,6 @@
 # yara.cr
 
-TODO: Write a description here
+Crystal bindings to [VirusTotal Yara](https://github.com/VirusTotal/yara) pattern matching tool aimed at helping malware researchers to identify and classify malware samples.
 
 ## Installation
 
@@ -8,8 +8,8 @@ TODO: Write a description here
 
    ```yaml
    dependencies:
-     yara.cr:
-       github: your-github-user/yara.cr
+     yara:
+       github: BlackHabanero/yara.cr
    ```
 
 2. Run `shards install`
@@ -17,7 +17,7 @@ TODO: Write a description here
 ## Usage
 
 ```crystal
-require "yara.cr"
+require "yara"
 ```
 
 TODO: Write usage instructions here
@@ -28,7 +28,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/yara.cr/fork>)
+1. Fork it (<https://github.com/BlackHabanero/yara.cr/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -36,4 +36,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [BlackHabanero](https://github.com/your-github-user) - creator and maintainer
+- [BlackHabanero](https://github.com/BlackHabanero) - creator and maintainer
