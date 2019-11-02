@@ -47,8 +47,7 @@ module Yara
       end
     end
 
-    def add_input_src(file : File, namespace : String = "")
-      filename = File.basename(file.path)
+    def add_input_src(file : File, filename : String = File.basename(file.path), namespace : String = "")
       add_input_src(fd: file.fd, filename: filename, namespace: namespace)
     end
 
@@ -62,8 +61,46 @@ module Yara
       end
     end
 
-    def def_external_var(identifier : String, var : Bool|Float64|String|LibC::Long)
+    def def_external_var(identifier : String, val : Bool)
+      unless @finalized
+        unless LibYara.compiler_define_boolean_variable(@compiler, identifier, val) == 0
+          raise YaraException.new("Cannot define variable in compiler: boolean")
+        end
+      else
+        raise YaraException.new("Cannot define variable in finalized compiler")
+      end
     end
+
+    def def_external_var(identifier : String, val : Float64)
+      unless @finalized
+        unless LibYara.compiler_define_float_variable(@compiler, identifier, val) == 0
+          raise YaraException.new("Cannot define variable in compiler: float")
+        end
+      else
+        raise YaraException.new("Cannot define variable in finalized compiler")
+      end
+    end
+
+    def def_external_var(identifier : String, val : String)
+      unless @finalized
+        unless LibYara.compiler_define_string_variable(@compiler, identifier, val) == 0
+          raise YaraException.new("Cannot define variable in compiler: string")
+        end
+      else
+        raise YaraException.new("Cannot define variable in finalized compiler")
+      end
+    end
+
+    def def_external_var(identifier : String, val : LibC::Long)
+      unless @finalized
+        unless LibYara.compiler_define_string_variable(@compiler, identifier, val) == 0
+          raise YaraException.new("Cannot define variable in compiler: double")
+        end
+      else
+        raise YaraException.new("Cannot define variable in finalized compiler")
+      end
+    end
+
     def compile
       unless @finalized
       else
