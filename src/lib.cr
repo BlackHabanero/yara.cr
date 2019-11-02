@@ -37,7 +37,7 @@ lib LibYara
   alias X_IoLockT = Void
   alias X_IoMarker = Void
   alias X_IoWideData = Void
-  alias X_YrStopwatch = Void
+  alias X_YrStopwatch = Void*
   alias X__Int32T = LibC::Int
   alias X__Int64T = LibC::Long
   alias X__Int8T = LibC::Char
@@ -49,7 +49,6 @@ lib LibYara
   alias X__Uint64T = LibC::ULong
   alias X__Uint8T = UInt8
   alias YrAcMatchTable = YrAcMatchTableEntry
-  alias YrAcMatchTableEntry = Void
   alias YrAcTransition = Uint32T
   alias YrAcTransitionTable = YrAcTransition*
   alias YrAtomsQualityFunc = (YrAtomsConfig*, YrAtom* -> LibC::Int)
@@ -742,7 +741,6 @@ lib LibYara
   type YrHashTableEntry = X_YrHashTableEntry
   type YrMappedFile = X_YrMappedFile
   type YrReloc = X_YrReloc
-  type YrStopwatch = Void*
   type YrStopwatch = X_YrStopwatch
   type YrStream = X_YrStream
 
