@@ -2,6 +2,11 @@
 
 Crystal bindings to [VirusTotal Yara](https://github.com/VirusTotal/yara) pattern matching tool aimed at helping malware researchers to identify and classify malware samples.
 
+## Prerequisites
+
+This library requires libyara to run (latest version known to work - 3.11).
+You can install libyara from [source](https://github.com/VirusTotal/yara) to ensure you have the most recent version up and running.
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
@@ -21,10 +26,6 @@ require "yara"
 ```
 
 TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
 
 ## Contributing
 

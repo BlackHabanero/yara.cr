@@ -110,7 +110,7 @@ lib LibYara
   fun bitmask_find_non_colliding_offset = yr_bitmask_find_non_colliding_offset(a : LibC::ULong*, b : LibC::ULong*, len_a : Uint32T, len_b : Uint32T, off_a : Uint32T*) : Uint32T
   fun calloc = yr_calloc(count : LibC::SizeT, size : LibC::SizeT) : Void*
   fun compiler_add_fd = yr_compiler_add_fd(compiler : YrCompiler*, rules_fd : LibC::Int, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
-  fun compiler_add_file = yr_compiler_add_file(compiler : YrCompiler*, rules_file : File*, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
+  fun compiler_add_file = yr_compiler_add_file(compiler : YrCompiler*, rules_file : LibC::File*, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
   fun compiler_add_string = yr_compiler_add_string(compiler : YrCompiler*, rules_string : LibC::Char*, namespace_ : LibC::Char*) : LibC::Int
   fun compiler_create = yr_compiler_create(compiler : YrCompiler**) : LibC::Int
   fun compiler_define_boolean_variable = yr_compiler_define_boolean_variable(compiler : YrCompiler*, identifier : LibC::Char*, value : LibC::Int) : LibC::Int
@@ -297,38 +297,6 @@ lib LibYara
     next_sibling : ReNode*
     forward_code : Uint8T*
     backward_code : Uint8T*
-  end
-
-  struct X_IoFile
-    _flags : LibC::Int
-    _io_read_ptr : LibC::Char*
-    _io_read_end : LibC::Char*
-    _io_read_base : LibC::Char*
-    _io_write_base : LibC::Char*
-    _io_write_ptr : LibC::Char*
-    _io_write_end : LibC::Char*
-    _io_buf_base : LibC::Char*
-    _io_buf_end : LibC::Char*
-    _io_save_base : LibC::Char*
-    _io_backup_base : LibC::Char*
-    _io_save_end : LibC::Char*
-    _markers : X_IoMarker*
-    _chain : X_IoFile*
-    _fileno : LibC::Int
-    _flags2 : LibC::Int
-    _old_offset : X__OffT
-    _cur_column : LibC::UShort
-    _vtable_offset : LibC::Char
-    _shortbuf : LibC::Char[1]
-    _lock : X_IoLockT*
-    _offset : X__Off64T
-    _codecvt : X_IoCodecvt*
-    _wide_data : X_IoWideData*
-    _freeres_list : X_IoFile*
-    _freeres_buf : Void*
-    __pad5 : LibC::SizeT
-    _mode : LibC::Int
-    _unused2 : LibC::Char[20]
   end
 
   struct X_SizedString
@@ -728,7 +696,6 @@ lib LibYara
     next : YrStructureMember*
   end
 
-  type File = X_IoFile
   type SizedString = X_SizedString
   type X__PthreadListT = X__PthreadInternalList
   type YrAcMatchTableEntry = Void*
@@ -764,4 +731,9 @@ lib LibYara
     ss : SizedString*
     re : Re*
   end
+end
+
+lib LibC
+  type File = Void
+  fun fopen(filepath : LibC::Char*, mode : LibC::Char*) : File*
 end
