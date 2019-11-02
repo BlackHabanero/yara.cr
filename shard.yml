@@ -1,0 +1,9 @@
+name: yara.cr
+version: 0.1.0
+
+authors:
+  - BlackHabanero <51138542+BlackHabanero@users.noreply.github.com>
+
+crystal: 0.31.1
+
+license: MIT
