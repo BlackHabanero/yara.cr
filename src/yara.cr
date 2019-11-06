@@ -11,18 +11,18 @@ module Yara
       end
       @finalized = false
     end
+
     def finalize
       @finalized = true
-      LibYara.finalize
+      unless LibYara.finalize == 0
+        raise YaraException.new("Cannot finalize libyara")
+      end
     end
   end
 
   class Compiler
     @finalized : Bool
     def initialize
-      unless LibYara.initialize == 0
-        raise YaraException.new("Cannot initialize libyara")
-      end
       unless LibYara.compiler_create(out @compiler) == 0
         raise YaraException.new("Cannot initialize yara compiler")
       end
@@ -108,7 +108,7 @@ module Yara
       end
     end
 
-    def compile : LibYara::YrRules*
+    def compile
       unless @finalized
         unless LibYara.compiler_get_rules(@compiler, out rules) == 0
           raise YaraException.new("Cannot compile rules")
@@ -119,10 +119,63 @@ module Yara
         raise YaraException.new("Cannot compile rules with finalized compiler")
       end
     end
+
+    def reset
+      LibYara.compiler_destroy(@compiler)
+      unless LibYara.compiler_create(out @compiler) == 0
+        raise YaraException.new("Cannot initialize yara compiler")
+      end
+    end
+
     def finalize
       @finalized = true
       LibYara.compiler_destroy(@compiler)
-      LibYara.finalize
+    end
+  end
+
+  class RulesManager
+
+    def self.load_rules(filename : String)
+      unless LibYara.rules_load(filename, out rules) == 0
+        raise YaraException.new("Cannot load rules from file: #{filename}")
+      end
+      rules
+    end
+
+    def self.save_rules(filename : String, rules)
+      unless LibYara.rules_save(filename, rules) == 0
+        raise YaraException.new("Cannot save rules from file: #{filename}")
+      end
+    end
+
+    def self.destroy_rules(rules)
+      unless LibYara.rules_destroy(rules) == 0
+        raise YaraException.new("Cannot destroy rules")
+      end
+    end
+
+    def self.def_external_var(rules, identifier : String, val : Bool)
+      unless LibYara.rules_define_boolean_variable(rules, identifier, val) == 0
+        raise YaraException.new("Cannot define variable in rules manager: boolean")
+      end
+    end
+
+    def self.def_external_var(rules, identifier : String, val : Float64)
+      unless LibYara.rules_define_float_variable(rules, identifier, val) == 0
+        raise YaraException.new("Cannot define variable in rules manager: float")
+      end
+    end
+
+    def self.def_external_var(rules, identifier : String, val : String)
+      unless LibYara.rules_define_string_variable(rules, identifier, val) == 0
+        raise YaraException.new("Cannot define variable in rules manager: string")
+      end
+    end
+
+    def self.def_external_var(rules, identifier : String, val : LibC::Long)
+      unless LibYara.rules_define_integer_variable(rules, identifier, val) == 0
+        raise YaraException.new("Cannot define variable in rules manager: integer")
+      end
     end
   end
 
