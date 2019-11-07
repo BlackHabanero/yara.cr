@@ -73,6 +73,22 @@ describe Yara do
 
   describe "RulesManager" do
 
+    describe "#save_rules" do
+      it "saves rules to file" do
+        Yara::RulesManager.save_rules("out.yara", rules)
+        File.exists?("out.yara").should be_true
+        File.empty?("out.yara").should be_false
+      end
+    end
+
+    describe "#load_rules" do
+      it "loades rules from file" do
+        retrieved_rules = Yara::RulesManager.load_rules("out.yara")
+        retrieved_rules.should_not be_nil
+        File.delete("out.yara")
+      end
+    end
+
     describe "#def_external_var" do
       it "works on strings" do
         Yara::RulesManager.def_external_var(rules, "a", "c")

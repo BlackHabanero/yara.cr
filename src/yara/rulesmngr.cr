@@ -8,8 +8,8 @@ class Yara::RulesManager
   end
 
   def self.save_rules(filename : String, rules)
-    unless LibYara.rules_save(filename, rules) == 0
-      raise YaraException.new("Cannot save rules from file: #{filename}")
+    unless LibYara.rules_save(rules, filename) == 0
+      raise YaraException.new("Cannot save rules to file: #{filename}")
     end
   end
 
