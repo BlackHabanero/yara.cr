@@ -7,17 +7,6 @@ class Yara::Compiler
     @finalized = false
   end
 
-  # def add_input_src(file_path : String, namespace : String = "")
-  #   unless @finalized
-  #     filename = File.basename(file_path)
-  #     unless LibYara.compiler_add_file(@compiler, LibC.fopen(file_path, "rb"), namespace, filename) == 0
-  #       raise YaraException.new("Cannot add input source to compiler: file")
-  #     end
-  #   else
-  #     raise YaraException.new("Cannot add input source to finalized compiler")
-  #   end
-  # end
-
   def add_input_src(fd : Int32, filename : String, namespace : String = "")
     unless @finalized
       result = LibYara.compiler_add_fd(@compiler, fd, namespace, filename)

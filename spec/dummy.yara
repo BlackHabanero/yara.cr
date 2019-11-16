@@ -1,4 +1,4 @@
-rule dummy
+rule Dummy
 {
     condition:
        false

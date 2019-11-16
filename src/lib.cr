@@ -78,6 +78,18 @@ lib LibYara
     YrConfigMaxMatchData      = 2
     YrConfigLast              = 3
   end
+  enum Callback_Message
+    CALLBACK_MSG_RULE_MATCHING     = 1
+    CALLBACK_MSG_RULE_NOT_MATCHING = 2
+    CALLBACK_MSG_SCAN_FINISHED     = 3
+    CALLBACK_MSG_IMPORT_MODULE     = 4
+    CALLBACK_MSG_MODULE_IMPORTED   = 5
+  end
+  enum Callback_Return
+    CALLBACK_CONTINUE
+    CALLBACK_ABORT
+    CALLBACK_ERROR
+  end
   fun ac_add_string = yr_ac_add_string(automaton : YrAcAutomaton*, string : YrString*, atom : YrAtomListItem*, matches_arena : YrArena*) : LibC::Int
   fun ac_automaton_create = yr_ac_automaton_create(automaton : YrAcAutomaton**) : LibC::Int
   fun ac_automaton_destroy = yr_ac_automaton_destroy(automaton : YrAcAutomaton*) : LibC::Int
@@ -110,7 +122,7 @@ lib LibYara
   fun bitmask_find_non_colliding_offset = yr_bitmask_find_non_colliding_offset(a : LibC::ULong*, b : LibC::ULong*, len_a : Uint32T, len_b : Uint32T, off_a : Uint32T*) : Uint32T
   fun calloc = yr_calloc(count : LibC::SizeT, size : LibC::SizeT) : Void*
   fun compiler_add_fd = yr_compiler_add_fd(compiler : YrCompiler*, rules_fd : LibC::Int, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
-  fun compiler_add_file = yr_compiler_add_file(compiler : YrCompiler*, rules_file : LibC::File*, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
+  #fun compiler_add_file = yr_compiler_add_file(compiler : YrCompiler*, rules_file : File*, namespace_ : LibC::Char*, file_name : LibC::Char*) : LibC::Int
   fun compiler_add_string = yr_compiler_add_string(compiler : YrCompiler*, rules_string : LibC::Char*, namespace_ : LibC::Char*) : LibC::Int
   fun compiler_create = yr_compiler_create(compiler : YrCompiler**) : LibC::Int
   fun compiler_define_boolean_variable = yr_compiler_define_boolean_variable(compiler : YrCompiler*, identifier : LibC::Char*, value : LibC::Int) : LibC::Int
@@ -632,6 +644,11 @@ lib LibYara
   struct YrRule
     g_flags : Int32T
     t_flags : Int32T[32]
+    identifier : LibC::Char*
+    tags : LibC::Char*
+    metas : YrMeta*
+    strings : YrString*
+    ns : YrNamespace*
     num_atoms : Int32T
     time_cost : Int64T
     time_cost_per_thread : Int64T[32]
@@ -731,9 +748,4 @@ lib LibYara
     ss : SizedString*
     re : Re*
   end
-end
-
-lib LibC
-  type File = Void
-  fun fopen(filepath : LibC::Char*, mode : LibC::Char*) : File*
 end

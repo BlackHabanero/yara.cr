@@ -7,7 +7,7 @@ describe Yara do
 
   describe "Yara" do
     describe "#initialize" do
-      it "initializes class" do
+      it "initializes object" do
         yara = Yara::Yara.new
         yara.should_not be_nil
       end
@@ -17,20 +17,16 @@ describe Yara do
   describe "Compiler" do
 
     describe "#initialize" do
-      it "initializes class" do
+      it "initializes object" do
         compiler = Yara::Compiler.new
         compiler.should_not be_nil
       end
     end
 
     describe "#add_input_src" do
-      # pending "works on files C way" do
-      #   compiler = Yara::Compiler.new
-      #   compiler.add_input_src("spec/dummy.yara")
-      #   compiler.finalize
-      # end
       it "works on files" do
-        compiler.add_input_src(File.new("spec/dummy.yara"))
+        compiler.add_input_src(File.new("spec/tdep.yara"))
+        compiler.add_input_src(File.new("spec/tallica.yara"))
       end
       it "works on file descriptors" do
         compiler2 = Yara::Compiler.new
@@ -75,17 +71,17 @@ describe Yara do
 
     describe "#save_rules" do
       it "saves rules to file" do
-        Yara::RulesManager.save_rules("out.yara", rules)
-        File.exists?("out.yara").should be_true
-        File.empty?("out.yara").should be_false
+        Yara::RulesManager.save_rules("out.yarac", rules)
+        File.exists?("out.yarac").should be_true
+        File.empty?("out.yarac").should be_false
       end
     end
 
     describe "#load_rules" do
       it "loades rules from file" do
-        retrieved_rules = Yara::RulesManager.load_rules("out.yara")
+        retrieved_rules = Yara::RulesManager.load_rules("out.yarac")
         retrieved_rules.should_not be_nil
-        File.delete("out.yara")
+        File.delete("out.yarac")
       end
     end
 
@@ -103,7 +99,29 @@ describe Yara do
         Yara::RulesManager.def_external_var(rules, "d", LibC::Long.new(666))
       end
     end
+  end
 
+  describe "Scanner" do
+    scanner = uninitialized Yara::Scanner
+    describe "#initialize" do
+      it "initializes object" do
+        scanner = Yara::Scanner.new(false)
+      end
+    end
+    describe "#scan" do
+      it "scans files" do
+        scanner.scan(rules, File.new("spec/happiness.txt"))
+      end
+    end
+    describe "#get_scan_output" do
+      it "returns scan output" do
+        output = scanner.get_scan_output
+        output.should eq({"TheDillingerEscapePlan" => true, "Metallica" => false})
+      end
+    end
+  end
+
+  describe "RulesManager" do
     describe "#destroy_rules" do
       it "destroys rules" do
         Yara::RulesManager.destroy_rules(rules)
@@ -113,7 +131,7 @@ describe Yara do
 
   describe "Compiler" do
     describe "#finalize" do
-      it "finalizes class" do
+      it "finalizes object" do
         compiler.finalize
       end
     end
@@ -121,7 +139,7 @@ describe Yara do
 
   describe "Yara" do
     describe "#finalize" do
-      it "finalizes class" do
+      it "finalizes object" do
         yara.finalize
       end
     end
