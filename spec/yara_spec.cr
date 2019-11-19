@@ -105,7 +105,7 @@ describe Yara do
     scanner = uninitialized Yara::Scanner
     describe "#initialize" do
       it "initializes object" do
-        scanner = Yara::Scanner.new(false)
+        scanner = Yara::Scanner.new
       end
     end
     describe "#scan" do
@@ -115,7 +115,7 @@ describe Yara do
     end
     describe "#get_scan_output" do
       it "returns scan output" do
-        output = scanner.get_scan_output
+        output = scanner.get_scan_result
         output.should eq({"TheDillingerEscapePlan" => true, "Metallica" => false})
       end
     end

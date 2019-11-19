@@ -1,8 +1,7 @@
 name: yara.cr
 version: 0.1.0
 
-description: |
-Crystal bindings to VirusTotal Yara pattern matching tool
+description: Crystal bindings to VirusTotal Yara pattern matching tool
 
 authors:
   - BlackHabanero <51138542+BlackHabanero@users.noreply.github.com>
@@ -12,4 +11,4 @@ crystal: 0.31.1
 license: MIT
 
 libraries:
-  libyara: >= 3.11
+  libyara: => 3.11

@@ -12,7 +12,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Prepare environment
+      run: apt-get update && apt-get install -y automake libtool
     - name: Install dependencies
       run: shards install
+    - name: Get libyara
+      run: git clone https://github.com/VirusTotal/yara
+    - name: Build libyara
+      run: cd yara && pwd && ./build.sh && make install
+    - name: Add LIBDIR
+      run: sh -c 'echo "/usr/local/lib" >> /etc/ld.so.conf' && ldconfig
     - name: Run tests
       run: crystal spec
