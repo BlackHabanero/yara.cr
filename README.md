@@ -2,6 +2,8 @@
 
 Crystal bindings to [VirusTotal Yara](https://github.com/VirusTotal/yara) pattern matching tool aimed at helping malware researchers to identify and classify malware samples.
 
+![](https://github.com/BlackHabanero/yara.cr/workflows/Crystal%20CI/badge.svg)
+
 ## Prerequisites
 
 This library requires libyara to run (latest version known to work - 3.11).
