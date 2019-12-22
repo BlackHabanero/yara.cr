@@ -6,7 +6,7 @@ description: Crystal bindings to VirusTotal Yara pattern matching tool
 authors:
   - BlackHabanero <51138542+BlackHabanero@users.noreply.github.com>
 
-crystal: 0.31.1
+crystal: 0.32.1
 
 license: MIT
 
