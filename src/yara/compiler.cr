@@ -1,20 +1,47 @@
 class Yara::Compiler
   @finalized : Bool
-  def initialize
+  @errors : String
+
+  def initialize()
     unless LibYara.compiler_create(out @compiler) == 0
       raise YaraException.new("Cannot initialize yara compiler")
     end
+
+    @errors = ""
+
+    @box = Box.box(->callback_endpoint(Int32, String, Int32, String))
+    callbee = ->(error_level : LibC::Int, file_name : LibC::Char*, line_number : LibC::Int, message : LibC::Char*, usr_data : Void*) {
+      data_as_callback = Box(Proc(Int32, String, Int32, String, Nil)).unbox(usr_data)
+      f_n = if file_name.null?
+        "NULL"
+      else
+        String.new(file_name)
+      end
+      data_as_callback.call(error_level, f_n, line_number, String.new(message))
+    }
+    LibYara.compiler_set_callback(@compiler, callbee, @box)
+
     @finalized = false
+  end
+
+  private def callback_endpoint(error_lvl : Int32, file_name : String, line_number : Int32, message : String) : Nil
+    if error_lvl == 0
+      s = "Error"
+    else
+      s = "Warning"
+    end
+    @errors = @errors + "#{s} in #{file_name} at line #{line_number}:\n#{message}\n"
   end
 
   def add_input_src(fd : Int32, filename : String, namespace : String = "")
     unless @finalized
       result = LibYara.compiler_add_fd(@compiler, fd, namespace, filename)
       unless result == 0
-        self.finalize
-        raise YaraException.new("Cannot add input source to compiler: file descriptor, #{result} errors found")
+        @finalized = true
+        raise YaraException.new("Cannot add input source to compiler: file descriptor, #{result} errors found\n"+@errors)
       end
     else
+
       raise YaraException.new("Cannot add input source to finalized compiler")
     end
   end
@@ -27,8 +54,8 @@ class Yara::Compiler
     unless @finalized
       result = LibYara.compiler_add_string(@compiler, string, namespace)
       unless result == 0
-        self.finalize
-        raise YaraException.new("Cannot add input source to compiler: string, #{result} errors found")
+        @finalized = true
+        raise YaraException.new("Cannot add input source to compiler: string, #{result} errors found\n"+@errors)
       end
     else
       raise YaraException.new("Cannot add input source to finalized compiler")

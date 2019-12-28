@@ -1,5 +1,6 @@
 class Yara::Scanner
   @box : Pointer(Void)?
+  @output : Hash(String, Bool)
 
   def initialize(@print_output : Bool = false, @refresh_scan_result : Bool = true)
     @output = Hash(String, Bool).new

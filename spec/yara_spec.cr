@@ -28,12 +28,8 @@ describe Yara do
         compiler.add_input_src(File.new("spec/tdep.yara"))
         compiler.add_input_src(File.new("spec/tallica.yara"))
       end
-      it "works on file descriptors" do
-        compiler2 = Yara::Compiler.new
-        compiler2.add_input_src(File.new("spec/dummy.yara").fd, "dummy")
-      end
+      compiler2 = Yara::Compiler.new
       it "works on strings" do
-        compiler2 = Yara::Compiler.new
         compiler2.add_input_src(<<-DUMMY
         rule dummy
         {
@@ -42,6 +38,16 @@ describe Yara do
         }
         DUMMY
         )
+      end
+      it "throws error" do
+        errormsg = <<-ERROR
+        Cannot add input source to compiler: string, 1 errors found
+        Error in NULL at line 2:
+        syntax error, unexpected identifier, expecting <condition>
+        ERROR
+        expect_raises(Yara::YaraException, errormsg) do
+          compiler2.add_input_src("rule dumm{\nconditio:\nfalse}")
+        end
       end
     end
 
